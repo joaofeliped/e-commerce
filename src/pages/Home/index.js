@@ -1,95 +1,42 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
 
+import api from '../../services/api';
 import { ProductList } from './styles';
 
-export default function Home() {
-  return (
-    <ProductList>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*" alt="tênis"/>
+export default class Home extends Component {
+  state = {
+    products: []
+  }
 
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
+  async componentDidMount() {
+    const response = await api.get('/products') ;
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF"/> 3
-          </div>
+    this.setState({
+      products: response.data,
+    });
+  }
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*" alt="tênis"/>
+  render() {
+    const { products } = this.state;
 
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
+    return (
+      <ProductList>
+        <li>
+          <img src={"https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*"} alt="tênis"/>
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF"/> 3
-          </div>
+          <strong>Tênis muito legal</strong>
+          <span>R$129,90</span>
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*" alt="tênis"/>
+          <button type="button">
+            <div>
+              <MdAddShoppingCart size={16} color="#FFF"/> 3
+            </div>
 
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF"/> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*" alt="tênis"/>
-
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF"/> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*" alt="tênis"/>
-
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF"/> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*" alt="tênis"/>
-
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF"/> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-    </ProductList>
-  );
+            <span>ADICIONAR AO CARRINHO</span>
+          </button>
+        </li>
+      </ProductList>
+    );
+  }
 }
