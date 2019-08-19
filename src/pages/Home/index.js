@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
+import { connect } from 'react-redux';
 
 import api from '../../services/api';
+import { formatPrice } from '../../util/format';
 import { ProductList } from './styles';
 
-export default class Home extends Component {
+class Home extends Component {
   state = {
     products: []
   }
@@ -12,8 +14,22 @@ export default class Home extends Component {
   async componentDidMount() {
     const response = await api.get('/products') ;
 
+    const data = response.data.map(product => ({
+      ...product,
+      priceFormatted: formatPrice(product.price)
+    }));
+
     this.setState({
-      products: response.data,
+      products: data,
+    });
+  }
+
+  handleAddProduct = product => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'ADD_TO_CART',
+      product
     });
   }
 
@@ -21,14 +37,16 @@ export default class Home extends Component {
     const { products } = this.state;
 
     return (
+
       <ProductList>
-        <li>
-          <img src={"https://static.netshoes.com.br/produtos/tenis-kappa-impact-masculino/04/D24-1738-304/D24-1738-304_detalhe2.jpg?resize=326:*"} alt="tênis"/>
+      {products.map(product => (
+        <li key={product.id}>
+          <img src={product.image} alt={product.title}/>
 
-          <strong>Tênis muito legal</strong>
-          <span>R$129,90</span>
+          <strong>{product.title}</strong>
+          <span>{product.priceFormatted}</span>
 
-          <button type="button">
+          <button type="button" onClick={() => this.handleAddProduct(product)}>
             <div>
               <MdAddShoppingCart size={16} color="#FFF"/> 3
             </div>
@@ -36,7 +54,10 @@ export default class Home extends Component {
             <span>ADICIONAR AO CARRINHO</span>
           </button>
         </li>
+      ))}
       </ProductList>
     );
   }
 }
+
+export default connect()(Home);
