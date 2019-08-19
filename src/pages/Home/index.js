@@ -39,22 +39,22 @@ class Home extends Component {
     return (
 
       <ProductList>
-      {products.map(product => (
-        <li key={product.id}>
-          <img src={product.image} alt={product.title}/>
+        {products.map(product => (
+          <li key={product.id}>
+            <img src={product.image} alt={product.title}/>
 
-          <strong>{product.title}</strong>
-          <span>{product.priceFormatted}</span>
+            <strong>{product.title}</strong>
+            <span>{product.priceFormatted}</span>
 
-          <button type="button" onClick={() => this.handleAddProduct(product)}>
-            <div>
-              <MdAddShoppingCart size={16} color="#FFF"/> 3
-            </div>
+            <button type="button" onClick={() => this.handleAddProduct(product)}>
+              <div>
+                <MdAddShoppingCart size={16} color="#FFF"/> 3
+              </div>
 
-            <span>ADICIONAR AO CARRINHO</span>
-          </button>
-        </li>
-      ))}
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+          </li>
+        ))}
       </ProductList>
     );
   }
