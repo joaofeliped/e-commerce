@@ -1,11 +1,13 @@
 import React from 'react';
 import { MdRemoveCircleOutline, MdAddCircleOutline, MdDelete } from 'react-icons/md';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import * as CartActions from '../../store/modules/cart/actions';
 import { Container, ProductTable, Total } from './styles';
 
-function Cart({ cart }) {
-  return (
+function Cart({ cart, removeFromCart }) {
+   return (
    <Container>
      <ProductTable>
         <thead>
@@ -24,7 +26,7 @@ function Cart({ cart }) {
                 </td>
                 <td>
                   <strong>{product.title}</strong>
-                  <span>{product.price}</span>
+                  <span>{product.priceFormatted}</span>
                 </td>
                 <td>
                   <div>
@@ -32,7 +34,7 @@ function Cart({ cart }) {
                       <MdRemoveCircleOutline size={16} color="#7159c1"/>
                     </button>
 
-                    <input type="number" readOnly value={2}/>
+                    <input type="number" readOnly value={product.amount}/>
 
                     <button type="button">
                       <MdAddCircleOutline size={16} color="#7159c1"/>
@@ -40,11 +42,11 @@ function Cart({ cart }) {
                   </div>
                 </td>
                 <td>
-                  <strong>{product.price}</strong>
+                  <strong>{product.priceFormatted}</strong>
                 </td>
                 <td>
-                  <button type="button">
-                    <MdDelete size={20} color="#7159c1"/>
+                  <button type="button" onClick={() => { removeFromCart(product.id)}}>
+                    <MdDelete size={20} color="#7159c1" />
                   </button>
                 </td>
               </tr>
@@ -64,5 +66,11 @@ function Cart({ cart }) {
   );
 }
 
+const mapStateToProps = state => ({
+  cart: state.cart
+});
 
-export default connect(state => ({ cart: state.cart }))(Cart);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
