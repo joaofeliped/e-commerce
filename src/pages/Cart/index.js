@@ -6,9 +6,17 @@ import { bindActionCreators } from 'redux';
 import * as CartActions from '../../store/modules/cart/actions';
 import { Container, ProductTable, Total } from './styles';
 
-function Cart({ cart, removeFromCart }) {
+function Cart({ cart, removeFromCart, updateAmount }) {
+  function decrement(product) {
+    updateAmount(product.id, product.amount - 1);
+  }
+
+  function increment(product) {
+    updateAmount(product.id, product.amount + 1);
+  }
+
    return (
-   <Container>
+    <Container>
      <ProductTable>
         <thead>
           <tr>
@@ -30,13 +38,13 @@ function Cart({ cart, removeFromCart }) {
                 </td>
                 <td>
                   <div>
-                    <button type="button">
+                    <button type="button" onClick={() => decrement(product)}>
                       <MdRemoveCircleOutline size={16} color="#7159c1"/>
                     </button>
 
                     <input type="number" readOnly value={product.amount}/>
 
-                    <button type="button">
+                    <button type="button" onClick={() => increment(product)}>
                       <MdAddCircleOutline size={16} color="#7159c1"/>
                     </button>
                   </div>
