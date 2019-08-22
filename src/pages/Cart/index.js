@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as CartActions from '../../store/modules/cart/actions';
+import { formatPrice } from '../../util/format';
 import { Container, ProductTable, Total } from './styles';
 
-function Cart({ cart, removeFromCart, updateAmount }) {
+function Cart({ cart, total, removeFromCart, updateAmount }) {
   function decrement(product) {
     updateAmount(product.id, product.amount - 1);
   }
@@ -50,7 +51,7 @@ function Cart({ cart, removeFromCart, updateAmount }) {
                   </div>
                 </td>
                 <td>
-                  <strong>{product.priceFormatted}</strong>
+                  <strong>{product.subtotal}</strong>
                 </td>
                 <td>
                   <button type="button" onClick={() => { removeFromCart(product.id)}}>
@@ -67,7 +68,7 @@ function Cart({ cart, removeFromCart, updateAmount }) {
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$1920,28</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>
@@ -75,7 +76,13 @@ function Cart({ cart, removeFromCart, updateAmount }) {
 }
 
 const mapStateToProps = state => ({
-  cart: state.cart
+  cart: state.cart.map(product => ({
+    ...product,
+    subtotal: formatPrice(product.amount * product.price)
+  })),
+  total: formatPrice(state.cart.reduce((total, product) => {
+    return total + product.price * product.amount;
+  }, 0)),
 });
 
 const mapDispatchToProps = dispatch =>
