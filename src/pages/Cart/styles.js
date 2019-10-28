@@ -3,7 +3,7 @@ import { darken } from 'polished';
 
 export const Container = styled.div`
   padding: 30px;
-  background: #FFF;
+  background: #fff;
   border-radius: 4px;
 
   footer {
@@ -40,7 +40,7 @@ export const ProductTable = styled.table`
 
   tbody td {
     padding: 12px;
-    border-bottom: 1px solid #EEE;
+    border-bottom: 1px solid #eee;
   }
 
   img {
@@ -91,5 +91,16 @@ export const Total = styled.div`
   strong {
     font-size: 28px;
     margin-left: 5px;
+  }
+`;
+
+export const EmptyCart = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  span {
+    font-size: 30px;
+    font-weight: bold;
   }
 `;
