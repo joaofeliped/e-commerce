@@ -5,20 +5,38 @@ import {
   MdDelete,
   MdRemoveShoppingCart,
 } from 'react-icons/md';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as CartActions from '../../store/modules/cart/actions';
 import { formatPrice } from '../../util/format';
 import { Container, ProductTable, Total, EmptyCart } from './styles';
 
-function Cart({ cart, total, cartSize, removeFromCart, updateAmountRequest }) {
+export default function Cart() {
+  const total = useSelector(state =>
+    formatPrice(
+      state.cart.reduce((sumTotal, product) => {
+        return sumTotal + product.price * product.amount;
+      }, 0)
+    )
+  );
+
+  const cart = useSelector(state =>
+    state.cart.map(product => ({
+      ...product,
+      subtotal: formatPrice(product.amount * product.price),
+    }))
+  );
+
+  const cartSize = useSelector(state => state.cart.length);
+
+  const dispatch = useDispatch();
+
   function decrement(product) {
-    updateAmountRequest(product.id, product.amount - 1);
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount - 1));
   }
 
   function increment(product) {
-    updateAmountRequest(product.id, product.amount + 1);
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount + 1));
   }
 
   return (
@@ -64,7 +82,7 @@ function Cart({ cart, total, cartSize, removeFromCart, updateAmountRequest }) {
                     <button
                       type="button"
                       onClick={() => {
-                        removeFromCart(product.id);
+                        dispatch(CartActions.removeFromCart(product.id));
                       }}
                     >
                       <MdDelete size={20} color="#7159c1" />
@@ -93,24 +111,3 @@ function Cart({ cart, total, cartSize, removeFromCart, updateAmountRequest }) {
     </Container>
   );
 }
-
-const mapStateToProps = state => ({
-  cart: state.cart.map(product => ({
-    ...product,
-    subtotal: formatPrice(product.amount * product.price),
-  })),
-  total: formatPrice(
-    state.cart.reduce((total, product) => {
-      return total + product.price * product.amount;
-    }, 0)
-  ),
-  cartSize: state.cart.length,
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Cart);
